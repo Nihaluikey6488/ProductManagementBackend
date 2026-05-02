@@ -1,5 +1,8 @@
 let express = require("express");
-const userModel = require("./model/user.model");
+const userModel = require("./model/product.model");
+const productModel = require("./model/product.model");
+
+
 let app = express();
 app.use(express.json())
 app.post("/products/create", async (req, res) => {
@@ -12,7 +15,7 @@ app.post("/products/create", async (req, res) => {
     }
     
 
-  let newProduct = await userModel.create({
+  let newProduct = await productModel.create({
     name,
     price,
     description,
@@ -25,6 +28,7 @@ app.post("/products/create", async (req, res) => {
     newProduct
   })
   } catch (error) {
+    console.log("error in creation",error)
     return res.status(500).json({
         message:"Internal server error"
     })
@@ -33,7 +37,7 @@ app.post("/products/create", async (req, res) => {
 // get all products 
 app.get('/products',async(req,res)=>{
    try {
-     let products=await userModel.find()
+     let products=await productModel.find()
      return res.status(200).json({
         message:"products get successfully",
         products
@@ -51,7 +55,7 @@ app.get('/products',async(req,res)=>{
 app.get('/products/:id',async(req,res)=>{
    try {
     let {id}=req.params
-     let singleproduct=await userModel.findById(id)
+     let singleproduct=await productModel.findById(id)
      return res.status(200).json({
         message:"products get successfully by id",
         singleproduct
@@ -79,7 +83,7 @@ app.put('/products/update/:id', async (req, res) => {
     }
     
 
-  let updateduser = await userModel.findByIdAndUpdate(id,{
+  let updateduser = await productModel.findByIdAndUpdate(id,{
     name,
     price,
     description,
@@ -103,7 +107,7 @@ console.log(id)
 app.delete('/products/delete/:id',async(req,res)=>{
     try {
         let {id}=req.params
-       await userModel.findByIdAndDelete(id)
+       await productModel.findByIdAndDelete(id)
         return res.status(200).json({
             message:"product deleted successfully"
         })
